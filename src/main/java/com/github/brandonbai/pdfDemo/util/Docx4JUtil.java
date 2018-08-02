@@ -1,9 +1,11 @@
 package com.github.brandonbai.pdfDemo.util;
 
 import org.docx4j.XmlUtils;
+import org.docx4j.dml.wordprocessingDrawing.Inline;
 import org.docx4j.model.structure.SectionWrapper;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
 import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.HeaderPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
@@ -475,6 +477,39 @@ public class Docx4JUtil {
         footerP.setPPr(ppr);
         footerP.getContent().add(run);
         return footerP;
+    }
+
+    /**
+     * 创建图片
+     * @param wordMLPackage
+     * @param bytes
+     * @param filenameHint
+     * @param altText
+     * @param id1
+     * @param id2
+     * @param cx
+     * @return
+     * @throws Exception
+     */
+    public static org.docx4j.wml.P newImage( WordprocessingMLPackage wordMLPackage,
+                                             byte[] bytes,
+                                             String filenameHint, String altText,
+                                             int id1, int id2, long cx) throws Exception {
+
+        BinaryPartAbstractImage imagePart = BinaryPartAbstractImage.createImagePart(wordMLPackage, bytes);
+
+        Inline inline = imagePart.createImageInline( filenameHint, altText,
+                id1, id2, cx, false);
+
+        org.docx4j.wml.P  p = objectFactory.createP();
+        org.docx4j.wml.R  run = objectFactory.createR();
+        p.getContent().add(run);
+        org.docx4j.wml.Drawing drawing = objectFactory.createDrawing();
+        run.getContent().add(drawing);
+        drawing.getAnchorOrInline().add(inline);
+
+        return p;
+
     }
 
 
