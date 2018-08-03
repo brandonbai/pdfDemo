@@ -28,7 +28,7 @@ public class Main {
         String outputFilePath = "/Users/jifeihu/Desktop/简历.pdf";
 
         FileOutputStream os = new FileOutputStream(new File(outputFilePath));
-        Docx4J.toPDF(wordMLPackage, os);
+       // Docx4J.toPDF(wordMLPackage, os);
 
         FOSettings foSettings = Docx4J.createFOSettings();
         foSettings.setWmlPackage(wordMLPackage);
