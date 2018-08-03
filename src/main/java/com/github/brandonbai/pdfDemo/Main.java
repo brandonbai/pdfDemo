@@ -3,6 +3,7 @@ package com.github.brandonbai.pdfDemo;
 import com.github.brandonbai.pdfDemo.util.Docx4JUtil;
 import com.github.brandonbai.pdfDemo.util.FreemarkerUtil;
 import org.docx4j.Docx4J;
+import org.docx4j.convert.out.FOSettings;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
 import java.io.*;
@@ -24,9 +25,14 @@ public class Main {
 
         map.put("email", "xiaoming@abc.com");
         WordprocessingMLPackage wordMLPackage = Docx4JUtil.genaratePdfByFtlAndDocx4J("resume.ftl", map);
-        String outputFilePath = "/Users/xiaoming/简历.pdf";
+        String outputFilePath = "/Users/jifeihu/Desktop/简历.pdf";
 
-        Docx4J.toPDF(wordMLPackage, new FileOutputStream(new File(outputFilePath)));
+        FileOutputStream os = new FileOutputStream(new File(outputFilePath));
+        Docx4J.toPDF(wordMLPackage, os);
+
+        FOSettings foSettings = Docx4J.createFOSettings();
+        foSettings.setWmlPackage(wordMLPackage);
+        Docx4J.toFO(foSettings, os, Docx4J.FLAG_EXPORT_PREFER_XSL);
 
     }
 }
