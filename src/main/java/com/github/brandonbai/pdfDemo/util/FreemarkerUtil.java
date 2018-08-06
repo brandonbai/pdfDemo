@@ -2,8 +2,10 @@ package com.github.brandonbai.pdfDemo.util;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.StringWriter;
 
 /**
@@ -26,7 +28,7 @@ public class FreemarkerUtil {
         config.setTemplateUpdateDelay(0);
     }
 
-    public static Configuration getConfiguation(){
+    public static Configuration getConfiguration(){
         return config;
     }
 
@@ -36,8 +38,8 @@ public class FreemarkerUtil {
      * @return
      * @throws Exception
      */
-    public static String generate(String template, Object obj) throws Exception{
-        Configuration config = getConfiguation();
+    public static String generate(String template, Object obj) throws IOException, TemplateException {
+        Configuration config = getConfiguration();
         config.setDefaultEncoding("UTF-8");
         Template tp = config.getTemplate(template);
         StringWriter stringWriter = new StringWriter();

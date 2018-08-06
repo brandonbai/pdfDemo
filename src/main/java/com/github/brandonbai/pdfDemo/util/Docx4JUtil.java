@@ -1,8 +1,12 @@
 package com.github.brandonbai.pdfDemo.util;
 
+import freemarker.template.TemplateException;
+import org.docx4j.Docx4J;
 import org.docx4j.XmlUtils;
+import org.docx4j.convert.out.FOSettings;
 import org.docx4j.dml.wordprocessingDrawing.Inline;
 import org.docx4j.model.structure.SectionWrapper;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
@@ -18,6 +22,8 @@ import org.dom4j.Element;
 
 import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +81,27 @@ public class Docx4JUtil {
         ByteArrayInputStream in = new ByteArrayInputStream(generate.getBytes());
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(in);
         return wordMLPackage;
+    }
+
+    /**
+     * 生成pdf文档
+     * @param ftlName 模版文件
+     * @param obj 数据
+     * @param os 输出流
+     */
+    public static void process(String ftlName, Object obj, OutputStream os) throws IOException, TemplateException, Docx4JException {
+        // word doc os = ftl + obj
+        String generate = FreemarkerUtil.generate(ftlName, obj);
+        // word doc os -> str
+        ByteArrayInputStream in = new ByteArrayInputStream(generate.getBytes());
+        // str -> wordMLPackage object
+        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(in);
+        // wordMLPackage -> pdf os
+        FOSettings foSettings = Docx4J.createFOSettings();
+        foSettings.setWmlPackage(wordMLPackage);
+        foSettings.setApacheFopMime("application/pdf");
+        Docx4J.toFO(foSettings, os, Docx4J.FLAG_EXPORT_PREFER_XSL);
+//        Docx4J.toPDF(wordMLPackage, os);
     }
 
     /**

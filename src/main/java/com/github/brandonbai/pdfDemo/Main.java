@@ -19,20 +19,14 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
 
-        Map<String, Object> map = new HashMap<String, Object>(3);
+        Map<String, Object> map = new HashMap<>(3);
         map.put("name", "小明");
         map.put("address", "北京市朝阳区");
-
         map.put("email", "xiaoming@abc.com");
-        WordprocessingMLPackage wordMLPackage = Docx4JUtil.genaratePdfByFtlAndDocx4J("resume.ftl", map);
+        String ftlName = "resume.ftl";
         String outputFilePath = "/Users/jifeihu/Desktop/简历.pdf";
-
-        FileOutputStream os = new FileOutputStream(new File(outputFilePath));
-       // Docx4J.toPDF(wordMLPackage, os);
-
-        FOSettings foSettings = Docx4J.createFOSettings();
-        foSettings.setWmlPackage(wordMLPackage);
-        Docx4J.toFO(foSettings, os, Docx4J.FLAG_EXPORT_PREFER_XSL);
+        FileOutputStream os = new FileOutputStream(outputFilePath);
+        Docx4JUtil.process(ftlName, map, os);
 
     }
 }
