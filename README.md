@@ -1,6 +1,8 @@
 # pdfDemo
 java genarate pdf
 
+[中文](./README_CN.md)
+
 **use**
 
 * FreeMarker
